@@ -1,8 +1,8 @@
-package org.parkinglot.parkinglot1.servlets;
+package org.parkinglot.parkinglot3.servlets;
 
 // Importuri corectate conform structurii tale
-import org.parkinglot.parkinglot1.common.CarDto;
-import org.parkinglot.parkinglot1.ejb.CarsBean;
+import org.parkinglot.parkinglot3.common.CarDto;
+import org.parkinglot.parkinglot3.ejb.CarsBean;
 
 import jakarta.annotation.security.DeclareRoles;
 import jakarta.inject.Inject;
