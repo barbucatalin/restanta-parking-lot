@@ -1,6 +1,5 @@
 package org.parkinglot.parkinglot3.servlets;
 
-// Importuri corectate conform structurii tale
 import org.parkinglot.parkinglot3.common.CarDto;
 import org.parkinglot.parkinglot3.ejb.CarsBean;
 
@@ -20,17 +19,20 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
-@DeclareRoles({"READ_CARS", "WRITE_CARS"})
+// Am actualizat rolurile pentru a corespunde cu web.xml
+@DeclareRoles({"ADMIN", "USER"})
 @ServletSecurity(
-        value = @HttpConstraint(rolesAllowed = {"READ_CARS"}),
+        // Oricine are rolul USER sau ADMIN poate vedea lista de masini (GET)
+        value = @HttpConstraint(rolesAllowed = {"ADMIN", "USER"}),
         httpMethodConstraints = {
                 @HttpMethodConstraint(
                         value = "POST",
-                        rolesAllowed = {"WRITE_CARS"}
+                        // Doar cine are rolul ADMIN poate sterge masini (POST)
+                        rolesAllowed = {"ADMIN"}
                 )
         }
 )
-@WebServlet(name = "CarsManagement", urlPatterns = {"/Cars"})
+@WebServlet(name = "Cars", urlPatterns = {"/Cars"})
 public class Cars extends HttpServlet {
 
     @Inject
@@ -40,7 +42,7 @@ public class Cars extends HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
 
-        // Preluare date din EJB-ul injectat folosind pachetul corect
+        // Preluare date din EJB
         List<CarDto> carList = carManager.findAllCars();
 
         // Calcul locuri disponibile
@@ -52,6 +54,7 @@ public class Cars extends HttpServlet {
         req.setAttribute("numberOfFreeParkingSpots", Math.max(0, freeSpots));
         req.setAttribute("activePage", "Cars");
 
+        // Trimite datele catre fisierul JSP
         req.getRequestDispatcher("/WEB-INF/pages/cars.jsp")
                 .forward(req, resp);
     }
@@ -60,11 +63,11 @@ public class Cars extends HttpServlet {
     protected void doPost(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
 
-        // Preluam array-ul de ID-uri pentru stergere
+        // Preluam array-ul de ID-uri pentru stergere din checkbox-urile din formular
         String[] selectedCarIds = req.getParameterValues("car_ids");
 
         if (selectedCarIds != null && selectedCarIds.length > 0) {
-            // Conversie folosind Stream API
+            // Conversie din String[] in List<Long>
             List<Long> idsToDelete = Arrays.stream(selectedCarIds)
                     .map(Long::valueOf)
                     .collect(Collectors.toList());
@@ -72,7 +75,7 @@ public class Cars extends HttpServlet {
             carManager.deleteCarsByIds(idsToDelete);
         }
 
-        // Redirectionare catre lista actualizata
+        // Redirectionare inapoi la pagina de masini dupa stergere
         resp.sendRedirect(req.getContextPath() + "/Cars");
     }
 }

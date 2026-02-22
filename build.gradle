@@ -22,8 +22,14 @@ tasks.withType(JavaCompile) {
 }
 
 dependencies {
+    // API-ul principal Jakarta EE 10
     compileOnly('jakarta.platform:jakarta.jakartaee-api:10.0.0')
 
+    // Dependențele specifice pentru JSTL (pentru jakarta.tags.core)
+    compileOnly 'jakarta.servlet.jsp.jstl:jakarta.servlet.jsp.jstl-api:3.0.0'
+    implementation 'org.glassfish.web:jakarta.servlet.jsp.jstl:3.0.1'
+
+    // Testare
     testImplementation("org.junit.jupiter:junit-jupiter-api:${junitVersion}")
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:${junitVersion}")
 }

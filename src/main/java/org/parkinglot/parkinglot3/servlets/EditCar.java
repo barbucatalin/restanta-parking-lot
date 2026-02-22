@@ -19,7 +19,7 @@ import java.io.IOException;
 import java.util.Collection;
 
 @ServletSecurity(
-        value = @HttpConstraint(rolesAllowed = {"WRITE_CARS"})
+        value = @HttpConstraint(rolesAllowed = {"ADMIN"})
 )
 @WebServlet(name = "ModifyCarInfo", urlPatterns = {"/EditCar"})
 public class EditCar extends HttpServlet {

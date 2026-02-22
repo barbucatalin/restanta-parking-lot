@@ -18,7 +18,7 @@ import java.io.IOException;
 import java.util.Collection;
 
 @ServletSecurity(
-        value = @HttpConstraint(rolesAllowed = {"WRITE_CARS"})
+        value = @HttpConstraint(rolesAllowed = {"ADMIN"})
 )
 @WebServlet(name = "AddCarAction", urlPatterns = {"/AddCar"})
 public class AddCar extends HttpServlet {

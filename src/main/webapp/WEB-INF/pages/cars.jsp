@@ -5,16 +5,14 @@
 <t:pageTemplate pageTitle="Cars">
     <h1 class="mb-3">Cars</h1>
 
-    <!-- Add Car – doar pentru WRITE_CARS -->
-    <c:if test="${pageContext.request.isUserInRole('WRITE_CARS')}">
+    <c:if test="${pageContext.request.isUserInRole('ADMIN')}">
         <a class="btn btn-primary btn-lg mb-3"
            href="${pageContext.request.contextPath}/AddCar">
             Add Car
         </a>
     </c:if>
 
-    <!-- DELETE + EDIT – doar pentru WRITE_CARS -->
-    <c:if test="${pageContext.request.isUserInRole('WRITE_CARS')}">
+    <c:if test="${pageContext.request.isUserInRole('ADMIN')}">
         <form method="post" action="${pageContext.request.contextPath}/Cars">
             <div class="mb-3">
                 <button type="submit" class="btn btn-danger">
@@ -25,8 +23,6 @@
             <div class="row gy-3">
                 <c:forEach items="${cars}" var="car">
                     <div class="col-12 col-md-4">
-
-                        <!-- Checkbox -->
                         <div class="form-check">
                             <input class="form-check-input"
                                    type="checkbox"
@@ -38,7 +34,6 @@
                             </label>
                         </div>
 
-                        <!-- Edit -->
                         <div class="mt-2">
                             <a class="btn btn-secondary btn-sm"
                                href="${pageContext.request.contextPath}/EditCar?id=${car.id}">
@@ -51,8 +46,7 @@
         </form>
     </c:if>
 
-    <!-- Listă simplă (fără Edit/Delete) pentru utilizatori fără WRITE_CARS -->
-    <c:if test="${not pageContext.request.isUserInRole('WRITE_CARS')}">
+    <c:if test="${not pageContext.request.isUserInRole('ADMIN')}">
         <div class="row gy-3">
             <c:forEach items="${cars}" var="car">
                 <div class="col-12 col-md-4">
@@ -65,6 +59,7 @@
     <h5 class="mt-4">
         Free parking spots: ${numberOfFreeParkingSpots}
     </h5>
+
     <div class="topnav">
         <input type="text" placeholder="Search..">
     </div>
